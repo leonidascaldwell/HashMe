@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <link rel="stylesheet" href="hashme.css">
+          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+      <title>Hash Me</title>
+   </head>
+   <body>
+      
+      <form id="form">
+         <h1 style="text-align: center;">Hash Me</h1>
+         <h3>Quickly generate a hash for your hashing needs. Choose from various SHA hashing algorithms.</h3>
+         <div class="mb-3" id="output">
+            <label for="name">Output</label>
+            <br />
+            <div class="input-group">
+               <div class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i>            </div>
+               <input class="form-control" type="text" id="hashOutput" readonly/>
+               <button onclick="copyText()">Copy Generated Hash</button>
+            </div>
+         </div>
+
+         <div class="mb-3">
+            <label for="name">Text</label>
+            <br />
+            <div class="input-group">
+               <div class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i>            </div>
+               <input class="form-control" type="text" id="hashText" placeholder="Enter Text Here" onkeyup="calcHash()"/>
+            </div>
+         </div>
+         
+         <div class="mb-3">
+            <label for="hashType">Hash Type</label>
+            <br />
+            <div class="input-group">
+               <div class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true">            </i></div>
+               <select class="form-control" type="hashType" id="hashType" onchange="calcHash()">
+                     <option selected="selected">SHA-1</option>
+                     <option>SHA-224</option>
+                     <option>SHA3-224</option>
+                     <option>SHA-256</option>
+                     <option>SHA3-256</option>
+                     <option>SHA-384</option>
+                     <option>SHA3-384</option>
+                     <option>SHA-512</option>
+                     <option>SHA3-512</option>
+                  </select>
+               </div>
+            </div>
+         </div>
+         
+         <div class="mb-3">
+            <label for="hashCount">Hash Count</label>
+            <br />
+            <div class="input-group">
+               <div class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i>            </div>
+               <input class="form-control" type="text" id="hashCount" value="1" onchange="calcHash()" />
+               </div>
+            </div>
+         </div>
+         
+         <div class="mb-3">
+            <label for="inputType">Input Type</label>
+            <br />
+            <div class="input-group">
+               <div class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i>            </div>
+               <select class="form-control" type="text" id="inputType" onchange="calcHash()">
+                  <option value="B64">Base-64</option>
+                  <option selected="selected">TEXT</option>
+                  <option>HEX</option>
+               </select>
+
+               </div>
+            </div>
+
+            <div class="mb-3">
+               <label for="hashOutputType">Hash Output Type</label>
+               <br />
+               <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i>            </div>
+                  <select class="form-control" type="text" id="hashOutputType" onchange="calcHash()">
+                     <option value="B64">Base-64</option>
+                     <option selected="selected">HEX</option>
+                  </select>
+               </div>
+            </div>
+         </div>
+
+      </form> 
+      <script type="text/javascript" src="sha.js"></script>
+      <script type="text/javascript">
+      function calcHash() {
+         try {
+            var hashText = document.getElementById("hashText");
+            var inputType = document.getElementById("inputType");
+            var hashType = document.getElementById("hashType");
+            var hashCount = document.getElementById("hashCount");
+            var hashOutputType = document.getElementById("hashOutputType");
+            var hashOutput = document.getElementById("hashOutput");
+            var hashObj = new jsSHA(
+               hashType.options[hashType.selectedIndex].value,
+               inputType.options[inputType.selectedIndex].value,
+               {numRounds: parseInt(hashCount.value, 10)}
+            );
+            hashObj.update(hashText.value);
+            hashOutput.value = hashObj.getHash(hashOutputType.options[hashOutputType.selectedIndex].value);
+         } catch(e) {
+            hashOutput.value = e.message
+         }
+      }
+      function copyText() {
+        var copyText = document.getElementById("hashOutput");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+        navigator.clipboard.writeText(copyText.value);
+      }
+   </script>          
+   </body>
+</html>
